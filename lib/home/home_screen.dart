@@ -1,56 +1,86 @@
 import 'package:flutter/material.dart';
 import 'package:hemant_rajput_portfolio/project_Widgets/view/projects_widget.dart';
+import '../bottom_navigation/bottom_nav_widget.dart';
 import '../skills_widgets/view/skills_widget.dart';
+ // Import the BottomNavWidget
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const HomeContent(), // original layout moved to its own widget
+    const Center(child: Text("Projects")), // placeholder
+    const Center(child: Text("Skills")), // placeholder
+    const Center(child: Text("Contact")), // placeholder
+  ];
+
+  void _onNavTap(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(""), // Optional: Add logo or title
+        title: const Text(""),
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: [
-            _buildHeader(),
-            const SizedBox(height: 24),
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavWidget(
+        currentIndex: _currentIndex,
+        onTap: _onNavTap,
+      ),
+    );
+  }
+}
 
-            // Projects
-            buildProjectList(),
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
 
-
-            // Skills Section
-            Container(
-              width: double.infinity,
-              margin:EdgeInsets.symmetric(vertical: 26) ,
-              padding: const EdgeInsets.symmetric(vertical: 16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 14.0),
-                    child: Text(
-                      "Skills",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  buildSkillsList(),
-                ],
-              ),
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      child: ListView(
+        children: [
+          _buildHeader(),
+          const SizedBox(height: 24),
+          buildProjectList(),
+          Container(
+            width: double.infinity,
+            margin: const EdgeInsets.symmetric(vertical: 26),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(12),
             ),
-          ],
-        ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 14.0),
+                  child: Text(
+                    "Skills",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                buildSkillsList(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
